@@ -7,39 +7,29 @@ let lossesCounter = 0;
 let guessCounter = 13;
 let incorrectLetters = [];
 let wordBank = ["Spongebob", "Dexter", "Tommy", "Rocko", "Chucky", "Beavis", "Doug", "Bubbles", "Angelica", "Norbert", "Marge", "Jimmy", "Arthur", "Squidward", "Homer", "Bart", "Catdog", "Vegeta", "Bender"];
+let randomWord;
+let gameWord;
+let underscoreWord;
+let underScoreArr;
+let gameWordArr;
+
+resetGame();
+
 
 function resetGame () {
+    randomWord = Math.floor((Math.random() * 19) + 0);
+    gameWord = wordBank[randomWord].toLowerCase();
 
-    if (guessCounter > 0 && gameWord === underscoreWord) {
-        console.log("Congrats! You won!");
-        guessCounter = 13;
-        incorrectLetters = [];
-    } else if (guessCounter = 0) {
-        lossesCounter++;
-        console.log("You've hit the maximum number of guess. Try again!");
-        guessCounter = 13;
-        incorrectLetters = [];
-    }
+    gameWordArr = gameWord.split("");
     
+    underscoreWord = gameWord.replace(/[a-z]/g, '-');
+    
+    underScoreArr = underscoreWord.split("");
+    guessCounter = 13;
+    incorrectLetters = [];
+    document.getElementById("underscores").textContent = underScoreArr.join(" ");
+      
 }
-
-
-
-    let randomWord = Math.floor((Math.random() * 19) + 0);
-    let gameWord = wordBank[randomWord].toLowerCase();
-
-    let gameWordArr = gameWord.split("");
-    console.log(gameWordArr);
-    let underscoreWord = gameWord.replace(/[a-z]/g, '-');
-    console.log(underscoreWord);
-
-    let underScoreArr = underscoreWord.split("");
-    console.log(underScoreArr);
-    
-
-
-
-
 
 //onkeyup function to record the user's guess
 
@@ -54,50 +44,49 @@ document.onkeyup = function(event) {
           //if the user input is not in the word array, push the letter to the empty array
           //decrement the guessCounter
 
+          var boolSwitch = false;
+
           for (var i = 0; i < gameWordArr.length; i++) {
-            if (gameWordArr.includes(userInput)) {
+            if (gameWordArr[i] === (userInput)) {
                 console.log("I am in the word.");
-                var newWord = gameWordArr.replace("-", userInput);
-                console.log(newWord);
+                boolSwitch = true;
+                underScoreArr.splice(i, 1, userInput);
+                console.log(underScoreArr);
             }
-                else {
-                    incorrectLetters.push(userInput[i]);
-                    console.log(incorrectLetters);
-                    guessCounter--;
-                    console.log(guessCounter);
-                }
-
-
+               
                 //need a .join method to form a string to write to the screen at the end
-            }
           }
 
+          if (!boolSwitch) {
+              guessCounter--;
+          }
+
+          incorrectLetters.push(userInput);
+          console.log(incorrectLetters);
+        
 
           //Using the DOM to adjust for the wins, losses, letters already guessed, current word 
 
-          let newWins = document.getElementById("#wins");
-          let newLosses = document.getElementById("#losses");
-          let newUnderscores = document.getElementById("#underscores");
-          let newNumGuesses = document.getElementById("#numGuesses");
-          let newGuessedLetters = document.getElementById("#guessedLetters");
+          document.getElementById("wins").textContent = "Wins: " + winsCounter;
+          document.getElementById("losses").textContent = "Losses: " + lossesCounter;
+          document.getElementById("underscores").textContent = underScoreArr.join(" ");
+          document.getElementById("numGuesses");
+          document.getElementById("guessedLetters");
 
-          newWins.createElement("p");
+          if (gameWord == underScoreArr.join("").toLowerCase()) {
+            console.log("Congrats! You won!");
+            winsCounter++;
+            resetGame();
+        } else if (guessCounter === 0) {
+            lossesCounter++;
+            console.log("You've hit the maximum number of guess. Try again!");
+            resetGame();
+        }
 
+        }
 
-          newWins.textContent = "Wins: " + winsCounter;
-          newLosses.textContent = "Losses: " + lossesCounter;
+        
 
-          newWins.appendChild(winText);
-          newLosses.appendChild(lossesText);
-          
-
-          span = document.getElementById("myspan");
-          txt = document.createTextNode("your cool text");
-          span.appendChild(txt);
-
-
-          
-          
 
 //startGame function to kick off the game
 
